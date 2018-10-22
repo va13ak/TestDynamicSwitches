@@ -4,8 +4,9 @@
     <string name="btnRegistration">РЕГИСТРАЦИЯ</string>
     <string name="btnReRegistration">ПЕРЕРЕГИСТРАЦИЯ</string>
     <string name="btnArchiveClosure">ЗАКРЫТИЕ АРХИВА</string>
-    <string name="titleINN">ИНН</string>
-    <string name="titleRegNumber">Регистрационный номер ККТ</string>
+    <string name="etINN">ИНН</string>
+    <string name="etRegNum">Регистрационный номер ККТ</string>
+    <string name="etCashier">Имя и номер кассира</string>
     <string name="titleAgentTag">Признак агента</string>
     <string name="titleTaxCode">Система налогообложения</string>
     <string name="titleOperatingMode">Режим работы</string>

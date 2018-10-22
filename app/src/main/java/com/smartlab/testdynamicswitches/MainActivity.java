@@ -2,10 +2,12 @@ package com.smartlab.testdynamicswitches;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -16,26 +18,22 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private HashMap<Enum<?>, Switch> switches = new HashMap<>();
     private HashMap<View, String> buttons = new HashMap<>();
+    private HashMap<String, EditText> inputFields = new HashMap<>();
 
     int agentTagValue = 0;
     int taxCodeValue = 0;
     int operatingModeValue = 0;
 
-    Button btnRefresh;
-    Button btnRegistration;
-    Button btnReRegistration;
-    Button btnArchiveClosure;
     LinearLayout llMain;
-    View firstDivider;
 
     private void registration() {
         taxCodeValue = getSwitchesValue(FiscalCoreEnums.TaxCode.values());
         operatingModeValue = getSwitchesValue(FiscalCoreEnums.OperatingMode.values());
         agentTagValue = getSwitchesValue(FiscalCoreEnums.AgentTag.values());
 
-        String cashierCodeName = "Кассир 1";
-        String regNumber = ((TextView)findViewById(R.id.etRegNumber)).getText().toString();
-        String INN = ((TextView)findViewById(R.id.etINN)).getText().toString();
+        String cashierCodeName = inputFields.get("etCashier").getText().toString();
+        String regNumber = inputFields.get("etRegNum").getText().toString();
+        String INN = inputFields.get("etINN").getText().toString();
 
         StringBuilder sb = new StringBuilder();
         sb.append(getResources().getString(R.string.btnRegistration)).append("\n");
@@ -109,8 +107,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void drawTextView(String title, ViewGroup parent) {
         TextView tv = new TextView(this);
+        tv.setTextSize(16);
         tv.setText(title);
         parent.addView(tv);
+    }
+
+    public void drawEditText(String name, int inputType) {
+        drawEditText(name, inputType, llMain);
+    }
+    public void drawEditText(String name, int inputType, String defaultString) {
+        drawEditText(name, inputType, defaultString, llMain);
+    }
+
+    public void drawEditText(String name, int inputType, ViewGroup parent) {
+        drawEditText(name, inputType, "", llMain);
+    }
+
+    public void drawEditText(String name, int inputType, String defaultString, ViewGroup parent) {
+        EditText et = new EditText(this);
+//        int stringByName = getResources().getIdentifier(name, "string", this.getPackageName());
+//        et.setHint(getResources().getString(stringByName));
+        et.setTextSize(16);
+        if (!defaultString.isEmpty()) {
+            et.setText(defaultString);
+        }
+        et.setInputType(inputType);
+
+        inputFields.put(name, et);
+
+        parent.addView(et);
     }
 
     public void drawDivider() {
@@ -146,23 +171,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         llMain = findViewById(R.id.llMain);
 
+        drawTextView(getResources().getString(R.string.btnRegistration));
+
         drawButton("btnRefresh");
 
-        drawDivider();
+        drawTextView(getResources().getString(R.string.etINN));
+        drawEditText("etINN", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        //drawDivider();
+
+        drawTextView(getResources().getString(R.string.etRegNum));
+        drawEditText("etRegNum", InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        //drawDivider();
+
         drawTextView(getResources().getString(R.string.titleTaxCode));
         drawSwitches(FiscalCoreEnums.TaxCode.values(), taxCodeValue);
 
         drawDivider();
+
         drawTextView(getResources().getString(R.string.titleOperatingMode));
         drawSwitches(FiscalCoreEnums.OperatingMode.values(), operatingModeValue);
 
         drawDivider();
+
         drawTextView(getResources().getString(R.string.titleAgentTag));
         drawSwitches(FiscalCoreEnums.AgentTag.values(), agentTagValue);
 
         drawDivider();
-        drawTextView(getResources().getString(R.string.titleAgentTag));
-        drawSwitches(FiscalCoreEnums.AgentTag.values(), agentTagValue);
+
+        drawTextView(getResources().getString(R.string.etCashier));
+        drawEditText("etCashier", InputType.TYPE_NUMBER_FLAG_DECIMAL, "кассир1");
 
         drawButton("btnRegistration");
         drawButton("btnReRegistration");
