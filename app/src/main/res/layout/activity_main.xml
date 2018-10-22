@@ -18,14 +18,6 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
-        <Button
-            android:id="@+id/btnRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnRefresh"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="81dp" />
-
         <TextView
             android:id="@+id/tvRegistration"
             android:layout_width="match_parent"
@@ -34,9 +26,6 @@
 
         <View style="@style/Divider"
         android:id="@+id/divider"/>
-        <!--android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider"/>-->
 
         <EditText
             android:id="@+id/etINN"
@@ -53,26 +42,6 @@
             android:hint="@string/titleRegNumber"
             android:inputType="number"
             android:text="" />
-
-        <Button
-            android:id="@+id/btnRegistration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnRegistration" />
-
-        <Button
-            android:id="@+id/btnReRegistration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnReRegistration" />
-
-        <Button
-            android:id="@+id/btnArchiveClosure"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnArchiveClosure" />
-
-
 
     </LinearLayout>
 </ScrollView>
