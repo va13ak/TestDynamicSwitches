@@ -1,12 +1,7 @@
 package com.smartlab.testdynamicswitches;
 
-import android.annotation.SuppressLint;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +15,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final static int AGENT_TAGS_STARTING_INDEX = 1000;
     final static int TAX_CODE_STARTING_INDEX = 2000;
     final static int OPERATING_MODE_STARTING_INDEX = 3000;
-
-    private static DisplayMetrics metrics;
 
     int agentTagValue = 0;
     int taxCodeValue = 0;
@@ -119,17 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         parent.addView(tv);
     }
 
-    /**
-     * Converts a dp value to pixels.
-     * @param dp
-     * @return Pixel value of dp.
-     */
-    public static float dpToPix(float dp) {
-        //return SCALE * dp + FLOAT_INT_AVG_NUDGE;
-        //InternalDimension id = new InternalDimension(dp, TypedValue.COMPLEX_UNIT_DIP);
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
-    }
-
     public void drawDivider() {
         drawDivider(llMain);
     }
@@ -138,19 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ContextThemeWrapper themeContext = new ContextThemeWrapper(this, R.style.Divider);
         View divider = new View(themeContext, null, 0);
 
-        //View divider = new View(this);
-        //divider.setLayoutParams(firstDivider.getLayoutParams());
-
-//        View divider = new View(this);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                ViewGroup.LayoutParams.FILL_PARENT, (int)dpToPix(1));
-//        //divider.setLayoutParams(firstDivider.getLayoutParams());
-//        //TypedArray array = getApplicationContext().getTheme()
-//        TypedArray array = getTheme().obtainStyledAttributes(new int[] {android.R.attr.listDivider});
-//        Drawable draw = array.getDrawable(0);
-//        array.recycle();
-//        divider.setBackgroundDrawable(draw);
-
         parent.addView(divider);
     }
 
@@ -158,8 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        metrics = getResources().getDisplayMetrics();
 
         btnRefresh = findViewById(R.id.btnRefresh);
         btnRefresh.setOnClickListener(this);
