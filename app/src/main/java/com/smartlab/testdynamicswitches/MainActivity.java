@@ -11,10 +11,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    final static int AGENT_TAGS_STARTING_INDEX = 1000;
-    final static int TAX_CODE_STARTING_INDEX = 2000;
-    final static int OPERATING_MODE_STARTING_INDEX = 3000;
+    private HashMap<Enum<?>, Switch> switches = new HashMap<>();
 
     int agentTagValue = 0;
     int taxCodeValue = 0;
@@ -28,9 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     View firstDivider;
 
     private void registration() {
-        taxCodeValue = getSwitchesValue(FiscalCoreEnums.AgentTag.values(), TAX_CODE_STARTING_INDEX);
-        operatingModeValue = getSwitchesValue(FiscalCoreEnums.AgentTag.values(), OPERATING_MODE_STARTING_INDEX);
-        agentTagValue = getSwitchesValue(FiscalCoreEnums.AgentTag.values(), AGENT_TAGS_STARTING_INDEX);
+        taxCodeValue = getSwitchesValue(FiscalCoreEnums.TaxCode.values());
+        operatingModeValue = getSwitchesValue(FiscalCoreEnums.OperatingMode.values());
+        agentTagValue = getSwitchesValue(FiscalCoreEnums.AgentTag.values());
+
         String cashierCodeName = "Кассир 1";
         String regNumber = ((TextView)findViewById(R.id.etRegNumber)).getText().toString();
         String INN = ((TextView)findViewById(R.id.etINN)).getText().toString();
@@ -68,10 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         showToast(sbMessage.toString());
     }
 
-    private <T extends Enum<T> & FiscalCoreEnums.EnumWithValueAndDescription> int getSwitchesValue(T[] aValues, int startingIndex) {
+    private <T extends Enum<T> & FiscalCoreEnums.EnumWithValueAndDescription> int getSwitchesValue(T[] aValues) {
         int newValue = 0;
         for (T element: aValues) {
-            Switch sw = findViewById(startingIndex + element.getValue());
+            Switch sw = switches.get(element);
             if (sw != null && sw.isChecked()) {
                 newValue += element.getValue();
             }
@@ -79,22 +80,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return newValue;
     }
 
-    private <T extends Enum<T> & FiscalCoreEnums.EnumWithValueAndDescription> void drawSwitches(T[] aValues, int startingIndex, int value) {
-        drawSwitches(aValues, startingIndex, value, llMain);
+    private <T extends Enum<T> & FiscalCoreEnums.EnumWithValueAndDescription> void drawSwitches(T[] aValues, int value) {
+        drawSwitches(aValues, value, llMain);
     }
 
-    private <T extends Enum<T> & FiscalCoreEnums.EnumWithValueAndDescription> void drawSwitches(T[] aValues, int startingIndex, int value, ViewGroup parent) {
+    private <T extends Enum<T> & FiscalCoreEnums.EnumWithValueAndDescription> void drawSwitches(T[] aValues, int value, ViewGroup parent) {
         for (T element: aValues) {
             if (element.getValue() == 0) {
                 continue;
             }
-            int switchId = startingIndex + element.getValue();
-            Switch sw = findViewById(switchId);
+            Switch sw = switches.get(element);
             if (sw == null) {
                 sw = new Switch(this);
                 sw.setText(element.getDescription());
-                sw.setOnClickListener(this);
-                sw.setId(switchId);
+
+                switches.put(element, sw);
 
                 parent.addView(sw);
             }
@@ -147,15 +147,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         drawDivider();
         drawTextView(getResources().getString(R.string.titleTaxCode));
-        drawSwitches(FiscalCoreEnums.TaxCode.values(), TAX_CODE_STARTING_INDEX, taxCodeValue);
+        drawSwitches(FiscalCoreEnums.TaxCode.values(), taxCodeValue);
 
         drawDivider();
         drawTextView(getResources().getString(R.string.titleOperatingMode));
-        drawSwitches(FiscalCoreEnums.OperatingMode.values(), OPERATING_MODE_STARTING_INDEX, operatingModeValue);
+        drawSwitches(FiscalCoreEnums.OperatingMode.values(), operatingModeValue);
 
         drawDivider();
         drawTextView(getResources().getString(R.string.titleAgentTag));
-        drawSwitches(FiscalCoreEnums.AgentTag.values(), AGENT_TAGS_STARTING_INDEX, agentTagValue);
+        drawSwitches(FiscalCoreEnums.AgentTag.values(), agentTagValue);
+
+        drawDivider();
+        drawTextView(getResources().getString(R.string.titleAgentTag));
+        drawSwitches(FiscalCoreEnums.AgentTag.values(), agentTagValue);
     }
 
     @Override
@@ -166,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showSwitches(FiscalCoreEnums.AgentTag.values());
                 break;
             case R.id.btnRegistration:
-                //showToast(getResources().getString(R.string.btnRegistration));
                 registration();
                 break;
             case R.id.btnReRegistration:
@@ -176,14 +179,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnArchiveClosure:
                 showToast(getResources().getString(R.string.btnArchiveClosure));
                 break;
-            default:
-                if ((elementId % AGENT_TAGS_STARTING_INDEX) == (elementId - AGENT_TAGS_STARTING_INDEX)) {
-                    showToast(FiscalCoreEnums.getElementsDescriptionByValue(FiscalCoreEnums.AgentTag.values(), elementId % AGENT_TAGS_STARTING_INDEX));
-                } else if ((elementId % TAX_CODE_STARTING_INDEX) == (elementId - TAX_CODE_STARTING_INDEX)) {
-                    showToast(FiscalCoreEnums.getElementsDescriptionByValue(FiscalCoreEnums.TaxCode.values(), elementId % TAX_CODE_STARTING_INDEX));
-                } else if ((elementId % OPERATING_MODE_STARTING_INDEX) == (elementId - OPERATING_MODE_STARTING_INDEX)) {
-                    showToast(FiscalCoreEnums.getElementsDescriptionByValue(FiscalCoreEnums.OperatingMode.values(), elementId % OPERATING_MODE_STARTING_INDEX));
-                }
         }
     }
 }
